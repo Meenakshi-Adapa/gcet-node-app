@@ -15,6 +15,11 @@ app.listen(8080, () => {
   console.log("Server started");
 });
 
+const userSchems = mongoose.Schems({
+    name: { type: String} ,
+});
+
+const user = mongoose.model("User", userSchem);
 
 app.get("/", (req, res) => {
     return res.send("Hello, World!");
