@@ -2,14 +2,12 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 
-import userModel from './models/userModel.js';
-import productModel from './models/productModel.js';
-
+import userRouter from './routes/userRoutes.js';
+import productRouter from './routes/productRoutes.js';
 
 import path from 'path';
 import { fileURLToPath } from 'url';
-import userModel from './models/userModel.js';
-import productModel from './models/productModel.js';
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -19,10 +17,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Serve static files from current directory
 app.use(express.static(path.join(__dirname)));
+app.use("/users", userRouter);
+app.use("/products", productRouter);
 
-const users = []; // In-memory user store
+// Serve index.html as landing page
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "index.html"));
+});
 
 app.listen(8080, () => {
   mongoose.connect("mongodb://localhost:27017/gcet");
@@ -31,35 +33,9 @@ app.listen(8080, () => {
 
 
 
-app.post("/Register",async(req,res) => {
-    const {name,email,pass} = req.body
-    const result = await userModel.insertOne({name,email,pass});
-    return res.json(result);
-});
-
-app.post("/Login",async(req,res) => {
-    const {email,pass} = req.body
-    const result = await userModel.findOne({email,pass});
-    if(!result) {
-        return res.status(401).json({ message: "Invalid credentials" });
-    }
-    else{
-        return res.json({ message: "Login successful", user: result });
-    }
-    
-});
 
 
 
-app.get("/products", async (req, res) => {
-    const result = await productModel.find();
-    return res.json(result);
-});
-
-// Serve index.html as landing page
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "index.html"));
-});
 
 app.get("/greet", (req, res) => {
     res.send("Greeting from the server!");
