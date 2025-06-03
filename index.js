@@ -1,12 +1,19 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
-
 app.use(cors());
 app.use(express.json());
+
+// Serve static files from current directory
+app.use(express.static(path.join(__dirname)));
 
 const users = []; // In-memory user store
 
@@ -22,7 +29,6 @@ const userSchema = mongoose.Schema({
 });
 
 const user = mongoose.model("User", userSchema);
-
 
 app.post("/Register",async(req,res) => {
     const {name,email,pass} = req.body
@@ -53,8 +59,9 @@ app.get("/products", async (req, res) => {
     return res.json(result);
 });
 
+// Serve index.html as landing page
 app.get("/", (req, res) => {
-    res.send("Holla!Bonjour!Hola!Bonjour!");
+    res.sendFile(path.join(__dirname, "index.html"));
 });
 
 app.get("/greet", (req, res) => {
