@@ -1,8 +1,15 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
+
+import user from './models/userModel.js';
+import Product from './models/productModel.js';
+
+
 import path from 'path';
 import { fileURLToPath } from 'url';
+import userModel from './models/userModel.js';
+import productModel from './models/productModel.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -26,13 +33,13 @@ app.listen(8080, () => {
 
 app.post("/Register",async(req,res) => {
     const {name,email,pass} = req.body
-    const result = await user.insertOne({name,email,pass});
+    const result = await userModel.insertOne({name,email,pass});
     return res.json(result);
 });
 
 app.post("/Login",async(req,res) => {
     const {email,pass} = req.body
-    const result = await user.findOne({email,pass});
+    const result = await userModel.findOne({email,pass});
     if(!result) {
         return res.status(401).json({ message: "Invalid credentials" });
     }
@@ -45,7 +52,7 @@ app.post("/Login",async(req,res) => {
 
 
 app.get("/products", async (req, res) => {
-    const result = await Product.find();
+    const result = await productModel.find();
     return res.json(result);
 });
 
