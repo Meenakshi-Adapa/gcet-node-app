@@ -11,18 +11,50 @@ app.use(express.json());
 const users = []; // In-memory user store
 
 app.listen(8080, () => {
-  mongoose.connect("http://localhost:27017:gcet");
+  mongoose.connect("mongodb://localhost:27017/gcet");
   console.log("Server started");
 });
 
-const userSchems = mongoose.Schems({
+const userSchema = mongoose.Schema({
     name: { type: String} ,
+    email: { type: String, required: true, unique: true },
+    pass: { type: String, required: true },
 });
 
-const user = mongoose.model("User", userSchem);
+const user = mongoose.model("User", userSchema);
+
+
+app.post("/Register",async(req,res) => {
+    const {name,email,pass} = req.body
+    const result = await user.insertOne({name,email,pass});
+    return res.json(result);
+});
+
+app.post("/Login",async(req,res) => {
+    const {email,pass} = req.body
+    const result = await user.findOne({email,pass});
+    if(!result) {
+        return res.status(401).json({ message: "Invalid credentials" });
+    }
+    else{
+        return res.json({ message: "Login successful", user: result });
+    }
+    return res.json(result);
+});
+
+const productSchema = mongoose.Schema({
+    name: { type: String, required: true },
+    price: { type: Number, required: true }
+});
+const Product = mongoose.model("Product", productSchema);
+
+app.get("/products", async (req, res) => {
+    const result = await Product.find();
+    return res.json(result);
+});
 
 app.get("/", (req, res) => {
-    return res.send("Hello, World!");
+    res.send("Holla!Bonjour!Hola!Bonjour!");
 });
 
 app.get("/greet", (req, res) => {
@@ -38,12 +70,5 @@ app.get("/weather", (req, res) => {
 });
 
 
-app.get("/product", (req, res) => {
-    const products = [
-        { id: 1, name: "Product 1", price: 10.99 },
-        { id: 2, name: "Product 2", price: 19.99 },
-        { id: 3, name: "Product 3", price: 5.99 }
-    ];
-    res.json(products);
-});
+
 
