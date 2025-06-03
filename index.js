@@ -1,7 +1,9 @@
 import express from 'express';
+import mongoose from 'mongoose';
 import cors from 'cors';
 
 const app = express();
+
 
 app.use(cors());
 app.use(express.json());
@@ -9,8 +11,10 @@ app.use(express.json());
 const users = []; // In-memory user store
 
 app.listen(8080, () => {
-    console.log("Server started");
+  mongoose.connect("http://localhost:27017:gcet");
+  console.log("Server started");
 });
+
 
 app.get("/", (req, res) => {
     return res.send("Hello, World!");
@@ -27,6 +31,7 @@ app.get("/name", (req, res) => {
 app.get("/weather", (req, res) => {
     res.send("Temperature is 30 degree Celsius");
 });
+
 
 app.get("/product", (req, res) => {
     const products = [
