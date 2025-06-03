@@ -22,13 +22,7 @@ app.listen(8080, () => {
   console.log("Server started");
 });
 
-const userSchema = mongoose.Schema({
-    name: { type: String} ,
-    email: { type: String, required: true, unique: true },
-    pass: { type: String, required: true },
-});
 
-const user = mongoose.model("User", userSchema);
 
 app.post("/Register",async(req,res) => {
     const {name,email,pass} = req.body
@@ -48,11 +42,7 @@ app.post("/Login",async(req,res) => {
     return res.json(result);
 });
 
-const productSchema = mongoose.Schema({
-    name: { type: String, required: true },
-    price: { type: Number, required: true }
-});
-const Product = mongoose.model("Product", productSchema);
+
 
 app.get("/products", async (req, res) => {
     const result = await Product.find();
