@@ -16,9 +16,9 @@ userRouter.post("/login", async (req, res) => {
   return res.json(result);
 });
 
-userRouter.get("/:id", async (req, res) => {
+userRouter.get("/:id/name", async (req, res) => {
   const email = req.params.id;
-  const result = await userModel.findOne({ email });
+  const result = await userModel.findOne({ email },{_id:0,name:1});
   return res.json(result);
 });
 

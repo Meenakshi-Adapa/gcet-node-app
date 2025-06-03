@@ -4,6 +4,7 @@ import cors from 'cors';
 
 import userRouter from './routes/userRoutes.js';
 import productRouter from './routes/productRoutes.js';
+import ordersRouter from './routes/ordersRoutes.js';
 
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname)));
 app.use("/users", userRouter);
 app.use("/products", productRouter);
+app.use("/orders", ordersRouter);
 
 // Serve index.html as landing page
 app.get("/", (req, res) => {
