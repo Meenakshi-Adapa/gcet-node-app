@@ -39,7 +39,7 @@ app.post("/Login",async(req,res) => {
     else{
         return res.json({ message: "Login successful", user: result });
     }
-    return res.json(result);
+    
 });
 
 
