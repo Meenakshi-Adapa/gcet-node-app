@@ -9,12 +9,8 @@ import ordersRouter from './routes/ordersRoutes.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
-import path from 'path';
-import { fileURLToPath } from 'url';
 
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -23,20 +19,22 @@ app.use(express.json());
 
 const MONGODB_URI = process.env.MONGODB_URI
 
-app.use(express.static(path.join(__dirname)));
+
 app.use("/users", userRouter);
 app.use("/products", productRouter);
 app.use("/orders", ordersRouter);
 
-// Serve index.html as landing page
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "index.html"));
-});
 
-app.listen(8080, () => {
-  mongoose.connect(`${MONGODB_URI}`);
-  console.log("Server started");
-});
+mongoose
+  .connect(MONGODB_URI)
+  .then(() => {
+    app.listen(8080, () => {
+      console.log("Server Started on port 8080");
+    });
+  })
+  .catch((error) => {
+    console.log(error);
+  });
 
 
 
