@@ -6,6 +6,9 @@ import userRouter from './routes/userRoutes.js';
 import productRouter from './routes/productRoutes.js';
 import ordersRouter from './routes/ordersRoutes.js';
 
+import dotenv from 'dotenv';
+dotenv.config();
+
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -18,6 +21,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const MONGODB_URI = process.env.MONGODB_URI
+
 app.use(express.static(path.join(__dirname)));
 app.use("/users", userRouter);
 app.use("/products", productRouter);
@@ -29,7 +34,7 @@ app.get("/", (req, res) => {
 });
 
 app.listen(8080, () => {
-  mongoose.connect("mongodb://localhost:27017/gcet");
+  mongoose.connect(`${MONGODB_URI}`);
   console.log("Server started");
 });
 
