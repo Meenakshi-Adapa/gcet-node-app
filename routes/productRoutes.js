@@ -3,6 +3,10 @@ import productModel from "../models/productModel.js";
 
 const productRouter = express.Router()
 
+productRouter.get("/", (req, res) => {
+  res.redirect("/products/all");
+});
+
 productRouter.get("/all", async (req, res) => {
   const products = await productModel.find();
   res.json(products);
