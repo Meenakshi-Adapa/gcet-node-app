@@ -1,5 +1,5 @@
 import express from 'express'
-import productModel from "../models/userModel.js";
+import productModel from "../models/productModel.js";
 
 const productRouter = express.Router()
 
@@ -8,4 +8,4 @@ productRouter.get("/all", async (req, res) => {
   res.json(products);
 });
 
-export default productRouterv
+export default productRouter
