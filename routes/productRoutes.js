@@ -8,4 +8,4 @@ productRouter.get("/all", async (req, res) => {
   res.json(products);
 });
 
-export default productRouter
+export default productRouterv
