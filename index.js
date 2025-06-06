@@ -1,33 +1,29 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import cors from 'cors';
-
-import userRouter from './routes/userRoutes.js';
-import productRouter from './routes/productRoutes.js';
-import ordersRouter from './routes/ordersRoutes.js';
-
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
 import dotenv from 'dotenv';
+import userRouter from "./routes/userRoutes.js";
+import productRouter from "./routes/productRoutes.js";
+import orderRouter from "./routes/orderRoutes.js";
+
 dotenv.config();
 
-
-
-
 const app = express();
-
 app.use(cors());
-app.options('*', cors()); // Enable preflight requests for all routes
 app.use(express.json());
 
-const MONGODB_URI = process.env.MONGODB_URI
+const DBUSER = encodeURIComponent(process.env.DBUSER)
+const DBPASS = encodeURIComponent(process.env.DBPASS)
+const MONGO_URI =`mongodb+srv://${DBUSER}:${DBPASS}@cluster0.qjxhv.mongodb.net/gcet?retryWrites=true&w=majority&appName=Cluste`
 
-
+// const MONGO_URI = process.env.MONGO_URI
+//testing
 app.use("/users", userRouter);
 app.use("/products", productRouter);
-app.use("/orders", ordersRouter);
-
+app.use("/orders",orderRouter)
 
 mongoose
-  .connect(MONGODB_URI)
+  .connect(MONGO_URI)
   .then(() => {
     app.listen(8080, () => {
       console.log("Server Started on port 8080");
@@ -36,24 +32,6 @@ mongoose
   .catch((error) => {
     console.log(error);
   });
-
-
-
-
-
-
-
-app.get("/greet", (req, res) => {
-    res.send("Greeting from the server!");
-});
-
-app.get("/name", (req, res) => {
-    res.send("My Name is Meenakshi msg from the server!");
-});
-
-app.get("/weather", (req, res) => {
-    res.send("Temperature is 30 degree Celsius");
-});
 
 
 
