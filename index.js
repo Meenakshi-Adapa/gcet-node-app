@@ -15,6 +15,7 @@ dotenv.config();
 const app = express();
 
 app.use(cors());
+app.options('*', cors()); // Enable preflight requests for all routes
 app.use(express.json());
 
 const MONGODB_URI = process.env.MONGODB_URI
