@@ -1,14 +1,17 @@
 import express from "express";
 import userModel from "../models/userModel.js";
+import bycrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 const userRouter = express.Router();
 
 userRouter.post("/register", async (req, res) => {
   const { name, email, pass } = req.body;
+  const hashedPass = await bycrypt.hash(pass, 10);
   const result = await userModel.insertOne({
     name: name,
     email: email,
-    pass: pass,
+    pass: hashedPass,
   });
   return res.json(result);
 });
