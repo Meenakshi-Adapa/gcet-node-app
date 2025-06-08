@@ -7,11 +7,12 @@ const auth = (req, res, next) => {
     if (token) {
       token = token.split(" ")[1]; 
       let user = jwt.verify(token, SECRET_KEY);
-      req.userId = user.id;
-      req.role = user.role;
+      // req.userId = user.id;
+      // req.role = user.role;
+      req.email = user.email;
       next();
     } else {
-      res.statu(401).json({ message: "Unauthorized Access" });
+      res.status(401).json({ message: "Unauthorized Access" });
     }
   } catch (err) {
     console.log(err);
