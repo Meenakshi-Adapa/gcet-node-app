@@ -8,10 +8,12 @@ productRouter.get("/all", auth, async (req, res) => {
   res.json(products);
 });
 
-productRouter.post("/new", async (req, res) => {
+// Removed the public route as per user request
+
+productRouter.post("/new", auth, async (req, res) => {
   const product = req.body
   const products = await productModel.create(product);
   res.json(products);
 });
 
-export default productRouter
+export default productRouter;
