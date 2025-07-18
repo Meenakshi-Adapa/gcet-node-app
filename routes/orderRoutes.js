@@ -6,6 +6,12 @@ const orderRouter = express.Router();
 orderRouter.post("/new", async (req, res) => {
   try {
     const { email, orderValue } = req.body;
+    if (!email || typeof email !== 'string' || email.trim() === '') {
+      return res.status(400).json({ message: "Invalid email" });
+    }
+    if (typeof orderValue !== 'number' || orderValue <= 0) {
+      return res.status(400).json({ message: "Invalid order value" });
+    }
     const result = await orderModel.create({ email, orderValue });
     return res.json(result);
   } catch (error) {
@@ -13,7 +19,7 @@ orderRouter.post("/new", async (req, res) => {
   }
 });
 
-orderRouter.get("/:id", async (req, res) => {
+orderRouter.get("/user/:id", async (req, res) => {
   try {
     const email = req.params.id;
     const result = await orderModel.find({ email });
